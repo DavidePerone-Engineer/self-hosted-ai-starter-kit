@@ -1,0 +1,29 @@
+sudo apt install -y curl ca-certificates apt-transport-https software-properties-common lsb-release
+
+# Add Docker’s official GPG key:
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+
+# Add Docker repository:
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+# Update repo and install Docker Engine + plugins:
+sudo apt update
+sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+sudo usermod -aG docker $USER
+# Log out and back in, or run: newgrp docker
+
+# Add Cloudflare GPG key
+sudo mkdir -p --mode=0755 /usr/share/keyrings
+curl -fsSL https://pkg.cloudflare.com/cloudflare-main.gpg | sudo tee /usr/share/keyrings/cloudflare-main.gpg >/dev/null
+
+# Add Cloudflared repo
+echo 'deb [signed-by=/usr/share/keyrings/cloudflare-main.gpg] https://pkg.cloudflare.com/cloudflared noble main' | sudo tee /etc/apt/sources.list.d/cloudflared.list
+
+# Update and install
+sudo apt-get update && sudo apt-get install cloudflared
+
+cloudflared --version
+
+
+git clone https://github.com/n8n-io/self-hosted-ai-starter-kit.git /root/n8n/self-hosted-ai-starter-kit
